@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Film Recommendations</title>
+
+<style>
+/* =========================
+   COLOR PALETTE
+========================= */
+:root{
+  --bg-deep: #070205;
+  --crimson: #6b0a12;
+  --red: #b1121b;
+  --hot: #ff3b2f;
+  --amber: #ffb56a;
+
+  --card: rgba(10, 6, 9, 0.65);
+  --text: #f6f1ef;
+  --muted: rgba(246,241,239,0.72);
+}
+
+/* =========================
+   BASE / BACKGROUND
+========================= */
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(900px 520px at 18% 12%, rgba(255,181,106,0.18), transparent 62%),
+    radial-gradient(880px 520px at 86% 18%, rgba(255,59,47,0.10), transparent 60%),
+    radial-gradient(1200px 900px at 52% 40%, rgba(177,18,27,0.34), rgba(107,10,18,0.92) 58%, rgba(7,2,5,1) 100%),
+    repeating-linear-gradient(90deg,
+      rgba(255,255,255,0.03) 0px,
+      rgba(255,255,255,0.03) 1px,
+      rgba(0,0,0,0.00) 10px,
+      rgba(0,0,0,0.00) 22px
+    );
+  background-color: var(--bg-deep);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* =========================
+   VIGNETTE + SHADOW SHAPES
+========================= */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(1200px 900px at 50% 45%, rgba(0,0,0,0.08), rgba(0,0,0,0.62) 72%, rgba(0,0,0,0.86) 100%),
+    radial-gradient(520px 320px at 25% 40%, rgba(0,0,0,0.26), transparent 65%),
+    radial-gradient(680px 420px at 32% 55%, rgba(0,0,0,0.20), transparent 70%),
+    radial-gradient(580px 380px at 72% 28%, rgba(0,0,0,0.22), transparent 68%);
+  mix-blend-mode: multiply;
+}
+
+/* =========================
+   35MM FILM GRAIN
+========================= */
+body::after{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    repeating-radial-gradient(circle at 0 0,
+      rgba(255,255,255,0.028) 0px,
+      rgba(255,255,255,0.028) 1px,
+      transparent 1px,
+      transparent 2px),
+    repeating-linear-gradient(0deg,
+      rgba(0,0,0,0.03) 0px,
+      rgba(0,0,0,0.03) 1px,
+      transparent 2px,
+      transparent 6px);
+  opacity: 0.55;
+  mix-blend-mode: overlay;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+.wrapper{
+  position: relative;
+  z-index: 2;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 40px 20px 70px;
+}
+
+header{
+  margin-bottom: 40px;
+}
+
+h1{
+  font-size: clamp(34px, 5vw, 56px);
+  letter-spacing: -0.03em;
+  margin: 0 0 12px;
+}
+
+p{
+  color: var(--muted);
+  max-width: 520px;
+  line-height: 1.5;
+}
+
+nav{
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+nav a{
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* =========================
+   SECTIONS
+========================= */
+section{
+  margin-top: 48px;
+}
+
+h2{
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+/* =========================
+   CARDS
+========================= */
+.grid{
+  display: grid;
+  grid-template-columns: repeat(12,1fr);
+  gap: 16px;
+}
+
+.card{
+  grid-column: span 6;
+  background: var(--card);
+  border-radius: 18px;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow:
+    0 0 26px rgba(255,59,47,0.08),
+    inset 0 0 40px rgba(0,0,0,0.4);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.card:hover{
+  transform: translateY(-4px);
+  box-shadow:
+    0 14px 40px rgba(0,0,0,0.65),
+    0 0 36px rgba(255,59,47,0.35);
+}
+
+.card h3{
+  margin: 0 0 8px;
+}
+
+.card p{
+  font-size: 14px;
+}
+
+.card a{
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff3b2f, #ffb56a);
+  color: #000;
+  font-weight: 600;
+}
+
+/* =========================
+   YOUTUBE EMBED
+========================= */
+.embed{
+  margin-top: 18px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+iframe{
+  width: 100%;
+  height: 420px;
+  border: 0;
+}
+
+/* =========================
+   FOOTER
+========================= */
+footer{
+  margin-top: 60px;
+  color: var(--muted);
+  font-size: 14px;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-top: 20px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 760px){
+  .card{ grid-column: span 12; }
+  iframe{ height: 300px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<header>
+  <h1>🎬 Film Recommendations</h1>
+  <p>Curated cinema picks — obsessive, subjective, and updated regularly.</p>
+
+  <nav>
+    <a href="#imdb">IMDb Lists</a>
+    <a href="#youtube">YouTube</a>
+    <a href="#about">About</a>
+  </nav>
+</header>
+
+<section id="imdb">
+  <h2>IMDb Lists</h2>
+  <div class="grid">
+
+    <div class="card">
+      <h3>Essential Films</h3>
+      <p>Personal canon — films that shaped my taste.</p>
+      <a href="PASTE_IMDB_LIST_LINK" target="_blank">Open on IMDb</a>
+    </div>
+
+    <div class="card">
+      <h3>Hidden & Cult Cinema</h3>
+      <p>Underseen, strange, unforgettable.</p>
+      <a href="PASTE_IMDB_LIST_LINK" target="_blank">Open on IMDb</a>
+    </div>
+
+  </div>
+</section>
+
+<section id="youtube">
+  <h2>YouTube Playlists</h2>
+
+  <div class="embed">
+    <iframe
+      src="https://www.youtube.com/embed/videoseries?list=PASTE_PLAYLIST_ID"
+      allowfullscreen>
+    </iframe>
+  </div>
+</section>
+
+<section id="about">
+  <h2>About</h2>
+  <p>
+    I collect films the way some people collect vinyl —
+    mood-first, image-driven, slightly obsessive.
+  </p>
+</section>
+
+<footer>
+  © <span id="year"></span> Film Recommendations
+</footer>
+
+</div>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
